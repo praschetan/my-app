@@ -6,32 +6,37 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Home() {
-  const { data: dashboardStats } = api.analytics.dashboardStats.useQuery();
-  const { data: campaigns } = api.campaigns.list.useQuery();
-  const { data: channels } = api.channels.list.useQuery();
+  const { data: dashboardStats, error: statsError } = api.analytics.dashboardStats.useQuery();
+  const { data: campaigns, error: campaignsError } = api.campaigns.list.useQuery();
+  const { data: channels, error: channelsError } = api.channels.list.useQuery();
+
+  const totalCampaigns = dashboardStats?.campaigns?.total ?? 0;
+  const totalAudiences = dashboardStats?.audiences?.total ?? 0;
+  const totalContent = dashboardStats?.content?.total ?? 0;
+  const activeChannels = channels?.filter((c) => c.isActive)?.length ?? 0;
 
   const stats = [
     {
       label: "Total Campaigns",
-      value: dashboardStats?.campaigns.total || 0,
+      value: String(totalCampaigns),
       description: "Active marketing campaigns",
       href: "/campaigns",
     },
     {
       label: "Audiences",
-      value: dashboardStats?.audiences.total || 0,
+      value: String(totalAudiences),
       description: "Segmented audience groups",
       href: "/audiences",
     },
     {
       label: "Content Pieces",
-      value: dashboardStats?.content.total || 0,
+      value: String(totalContent),
       description: "AI-generated content",
       href: "/content",
     },
     {
       label: "Active Channels",
-      value: channels?.filter((c) => c.isActive).length || 0,
+      value: String(activeChannels),
       description: "Configured delivery channels",
       href: "/channels",
     },
@@ -39,7 +44,12 @@ export default function Home() {
 
   const activeCampaigns = campaigns?.filter(
     (c) => c.status === "running" || c.status === "scheduled"
-  );
+  ) ?? [];
+
+  // Debug: log any errors
+  if (statsError) console.error("Stats error:", statsError);
+  if (campaignsError) console.error("Campaigns error:", campaignsError);
+  if (channelsError) console.error("Channels error:", channelsError);
 
   return (
     <main className="min-h-screen p-8">
@@ -91,11 +101,11 @@ export default function Home() {
             <CardHeader>
               <CardTitle>Active Campaigns</CardTitle>
               <CardDescription>
-                {activeCampaigns?.length || 0} campaigns running
+                {String(activeCampaigns.length)} campaigns running
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {activeCampaigns && activeCampaigns.length > 0 ? (
+              {activeCampaigns.length > 0 ? (
                 <ul className="space-y-2">
                   {activeCampaigns.slice(0, 5).map((campaign) => (
                     <li key={campaign.id}>
@@ -103,9 +113,9 @@ export default function Home() {
                         href={`/campaigns/${campaign.id}`}
                         className="flex justify-between items-center text-sm hover:text-primary"
                       >
-                        <span>{campaign.name}</span>
+                        <span>{String(campaign.name)}</span>
                         <span className="text-xs text-muted-foreground">
-                          {campaign.status}
+                          {String(campaign.status)}
                         </span>
                       </Link>
                     </li>

@@ -10,7 +10,16 @@
       "Bash(find src:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(railway:*)",
+      "Bash(/Users/chetan/Desktop/my-app/NEXT_STEPS.txt:*)",
+      "WebFetch(domain:railway.com)",
+      "Bash(curl:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:zDPtIdRYAgXNvngIXsJEQiCrCUDjnyOZ@crossover.proxy.rlwy.net:26913/railway\" npm run:*)",
+      "Bash(/Users/chetan/Desktop/my-app/DEPLOYMENT_STATUS.txt:*)",
+      "WebFetch(domain:my-app-production-7ca0.up.railway.app)",
+      "WebFetch(domain:my-app-service-production.up.railway.app)",
+      "Bash(grep:*)"
     ]
   }
 }
