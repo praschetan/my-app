@@ -10,5 +10,5 @@ node scripts/migrate.js
 echo ""
 echo "🚀 Starting application..."
 
-# Start Next.js standalone server
-node server.js
+# Start Next.js
+npm start
