@@ -4,6 +4,14 @@ const postgres = require("postgres");
 
 const connectionString = process.env.DATABASE_URL;
 
+console.log("📊 Environment check:");
+console.log("  DATABASE_URL:", connectionString ? "✅ Set" : "❌ Missing");
+if (connectionString) {
+  // Safely log without exposing password
+  const sanitized = connectionString.replace(/:[^@]+@/, ':***@');
+  console.log("  Connection:", sanitized);
+}
+
 if (!connectionString) {
   console.error("❌ DATABASE_URL environment variable is required");
   process.exit(1);
