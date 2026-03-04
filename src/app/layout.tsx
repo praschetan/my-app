@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 import { Nav } from "@/components/nav";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <TRPCReactProvider>
           <Nav />
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </TRPCReactProvider>
       </body>
     </html>

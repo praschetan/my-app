@@ -30,7 +30,7 @@ export const analyticsRouter = createTRPCRouter({
       const conversionRate = totalClicked > 0 ? (totalConverted / totalClicked) * 100 : 0;
 
       // Get event breakdown
-      const eventBreakdown = await ctx.db
+      const eventBreakdownRaw = await ctx.db
         .select({
           eventType: events.eventType,
           count: count(),
@@ -38,6 +38,12 @@ export const analyticsRouter = createTRPCRouter({
         .from(events)
         .where(eq(events.campaignId, input.campaignId))
         .groupBy(events.eventType);
+
+      // Ensure all values are plain serializable objects
+      const eventBreakdown = eventBreakdownRaw.map((e) => ({
+        eventType: e.eventType,
+        count: Number(e.count),
+      }));
 
       return {
         campaign,
@@ -88,7 +94,7 @@ export const analyticsRouter = createTRPCRouter({
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const recentEvents = await ctx.db
+    const recentEventsRaw = await ctx.db
       .select({
         eventType: events.eventType,
         count: count(),
@@ -96,6 +102,12 @@ export const analyticsRouter = createTRPCRouter({
       .from(events)
       .where(gte(events.timestamp, sevenDaysAgo))
       .groupBy(events.eventType);
+
+    // Ensure all values are plain serializable objects
+    const recentActivity = recentEventsRaw.map((e) => ({
+      eventType: e.eventType,
+      count: Number(e.count),
+    }));
 
     return {
       campaigns: {
@@ -109,7 +121,7 @@ export const analyticsRouter = createTRPCRouter({
       content: {
         total: totalContent.length,
       },
-      recentActivity: recentEvents,
+      recentActivity,
     };
   }),
 
@@ -124,9 +136,9 @@ export const analyticsRouter = createTRPCRouter({
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - input.days);
 
-      const timeline = await ctx.db
+      const timelineRaw = await ctx.db
         .select({
-          date: sql<string>`DATE(${events.timestamp})`,
+          date: sql<string>`DATE(${events.timestamp})::text`,
           eventType: events.eventType,
           count: count(),
         })
@@ -140,6 +152,11 @@ export const analyticsRouter = createTRPCRouter({
         .groupBy(sql`DATE(${events.timestamp})`, events.eventType)
         .orderBy(sql`DATE(${events.timestamp})`);
 
-      return timeline;
+      // Ensure all values are plain serializable objects
+      return timelineRaw.map((t) => ({
+        date: String(t.date),
+        eventType: t.eventType,
+        count: Number(t.count),
+      }));
     }),
 });
