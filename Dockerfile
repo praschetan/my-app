@@ -29,9 +29,13 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/src/server/db ./src/server/db
+COPY --from=builder /app/scripts ./scripts
+
+# Make startup script executable
+RUN chmod +x ./scripts/start-production.sh
 
 # Expose port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application with migrations
+CMD ["./scripts/start-production.sh"]
