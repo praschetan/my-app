@@ -1,5 +1,5 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { llm } from "@/lib/llm";
+import { getLLM } from "@/lib/llm";
 import {
   createGetCampaignTool,
   createCreateContentTool,
@@ -57,7 +57,7 @@ export async function executeContentCreator(
       ["human", "Please create compelling content for this campaign across multiple channels."],
     ]);
 
-    const llmWithTools = llm.bindTools(tools);
+    const llmWithTools = getLLM().bindTools(tools);
     const chain = prompt.pipe(llmWithTools);
 
     const response = await chain.invoke({

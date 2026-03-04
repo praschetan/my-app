@@ -1,5 +1,5 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { llm } from "@/lib/llm";
+import { getLLM } from "@/lib/llm";
 import {
   createGetCampaignTool,
   createGetChannelsTool,
@@ -68,7 +68,7 @@ export async function executeChannelOptimizer(
       ["human", "Please analyze and create an optimal channel strategy for this campaign."],
     ]);
 
-    const llmWithTools = llm.bindTools(tools);
+    const llmWithTools = getLLM().bindTools(tools);
     const chain = prompt.pipe(llmWithTools);
 
     const response = await chain.invoke({

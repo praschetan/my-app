@@ -1,5 +1,5 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { llm } from "@/lib/llm";
+import { getLLM } from "@/lib/llm";
 import {
   createGetCampaignTool,
   createUpdateCampaignTool,
@@ -60,7 +60,7 @@ export async function executeCampaignPlanner(
       ["human", "Please analyze the campaign goal and create a comprehensive plan."],
     ]);
 
-    const llmWithTools = llm.bindTools(tools);
+    const llmWithTools = getLLM().bindTools(tools);
     const chain = prompt.pipe(llmWithTools);
 
     // Execute the agent
