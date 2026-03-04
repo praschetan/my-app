@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 import { Nav } from "@/components/nav";
-import { ErrorBoundary } from "@/components/error-boundary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <TRPCReactProvider>
           <Nav />
-          <ErrorBoundary>{children}</ErrorBoundary>
+          {children}
         </TRPCReactProvider>
       </body>
     </html>

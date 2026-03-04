@@ -19,7 +19,8 @@
       "Bash(/Users/chetan/Desktop/my-app/DEPLOYMENT_STATUS.txt:*)",
       "WebFetch(domain:my-app-production-7ca0.up.railway.app)",
       "WebFetch(domain:my-app-service-production.up.railway.app)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git:*)"
     ]
   }
 }
