@@ -69,14 +69,14 @@ export function AgentStatus({ runId }: AgentStatusProps) {
             </div>
           )}
 
-          {run.output && (
+          {run.output ? (
             <div>
               <h3 className="text-sm font-medium mb-2">Workflow Output</h3>
               <pre className="bg-muted p-3 rounded-md overflow-auto text-xs">
-                {JSON.stringify(run.output, null, 2)}
+                {JSON.stringify(run.output as Record<string, unknown>, null, 2)}
               </pre>
             </div>
-          )}
+          ) : null}
         </div>
       </CardContent>
     </Card>

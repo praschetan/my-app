@@ -1,11 +1,12 @@
 import { db } from "./index";
 import { campaigns, audiences, audienceMembers, content, channels } from "./schema";
+import { eq } from "drizzle-orm";
 
 async function seed() {
   console.log("🌱 Seeding database...");
 
   // Create sample channels
-  const [emailChannel] = await db
+  await db
     .insert(channels)
     .values({
       type: "email",
@@ -16,10 +17,9 @@ async function seed() {
       },
       isActive: true,
       dailyLimit: 10000,
-    })
-    .returning();
+    });
 
-  const [smsChannel] = await db
+  await db
     .insert(channels)
     .values({
       type: "sms",
@@ -31,8 +31,7 @@ async function seed() {
       },
       isActive: false,
       dailyLimit: 1000,
-    })
-    .returning();
+    });
 
   console.log("✅ Created channels");
 

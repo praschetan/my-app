@@ -8,7 +8,7 @@ export interface SocialPost {
   body: string;
   imageUrl?: string;
   link?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class SocialService {

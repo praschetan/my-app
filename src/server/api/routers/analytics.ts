@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { events, campaignExecutions, campaigns } from "@/server/db/schema";
+import { events, campaignExecutions, campaigns, content } from "@/server/db/schema";
 import { eq, and, gte, count, sql } from "drizzle-orm";
 
 export const analyticsRouter = createTRPCRouter({
@@ -81,7 +81,7 @@ export const analyticsRouter = createTRPCRouter({
 
     // Get total content
     const totalContent = await ctx.db.query.content.findMany({
-      where: eq(ctx.db.query.content.isActive, true),
+      where: eq(content.isActive, true),
     });
 
     // Get recent events (last 7 days)

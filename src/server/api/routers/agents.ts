@@ -103,7 +103,7 @@ export const agentsRouter = createTRPCRouter({
 
   onRunUpdate: publicProcedure
     .input(z.object({ runId: z.string().uuid() }))
-    .subscription(({ input }) => {
+    .subscription(() => {
       return observable<{ status: string; currentAgent?: string }>((emit) => {
         // TODO: Implement real-time updates in Phase 3
         // For now, this is a placeholder

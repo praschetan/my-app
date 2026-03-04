@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { campaignExecutions, campaigns, channels, content, events } from "@/server/db/schema";
-import { eq, desc, and, gte } from "drizzle-orm";
+import { campaignExecutions, events } from "@/server/db/schema";
+import { eq, desc } from "drizzle-orm";
 
 export const executionRouter = createTRPCRouter({
   list: publicProcedure
@@ -135,7 +135,13 @@ export const executionRouter = createTRPCRouter({
         });
 
         if (execution) {
-          const updates: any = {};
+          const updates: {
+            deliveredCount?: number;
+            openedCount?: number;
+            clickedCount?: number;
+            convertedCount?: number;
+            failedCount?: number;
+          } = {};
 
           switch (input.eventType) {
             case "delivered":

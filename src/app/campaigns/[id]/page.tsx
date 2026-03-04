@@ -141,7 +141,7 @@ export default function CampaignDetailPage({
           </Card>
         </div>
 
-        {campaign.aiPlan && (
+        {campaign.aiPlan ? (
           <Card>
             <CardHeader>
               <CardTitle>AI-Generated Plan</CardTitle>
@@ -149,11 +149,11 @@ export default function CampaignDetailPage({
             </CardHeader>
             <CardContent>
               <pre className="bg-muted p-4 rounded-md overflow-auto text-sm">
-                {JSON.stringify(campaign.aiPlan, null, 2)}
+                {JSON.stringify(campaign.aiPlan as Record<string, unknown>, null, 2)}
               </pre>
             </CardContent>
           </Card>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ export interface EmailMessage {
   subject: string;
   body: string;
   html?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class EmailService {

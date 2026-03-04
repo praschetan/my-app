@@ -13,23 +13,23 @@ export const AgentState = Annotation.Root({
   }),
 
   // Outputs from each agent
-  campaignPlan: Annotation<Record<string, any> | null>({
+  campaignPlan: Annotation<Record<string, unknown> | null>({
     reducer: (_, newValue) => newValue,
     default: () => null,
   }),
-  audienceInsights: Annotation<Array<Record<string, any>>>({
+  audienceInsights: Annotation<Array<Record<string, unknown>>>({
     reducer: (current, newValue) => [...current, ...newValue],
     default: () => [],
   }),
-  generatedContent: Annotation<Array<Record<string, any>>>({
+  generatedContent: Annotation<Array<Record<string, unknown>>>({
     reducer: (current, newValue) => [...current, ...newValue],
     default: () => [],
   }),
-  channelStrategy: Annotation<Record<string, any> | null>({
+  channelStrategy: Annotation<Record<string, unknown> | null>({
     reducer: (_, newValue) => newValue,
     default: () => null,
   }),
-  performanceMetrics: Annotation<Record<string, any> | null>({
+  performanceMetrics: Annotation<Record<string, unknown> | null>({
     reducer: (_, newValue) => newValue,
     default: () => null,
   }),

@@ -68,7 +68,8 @@ export async function executeAudienceAnalyzer(
       for (const toolCall of response.tool_calls) {
         const tool = tools.find((t) => t.name === toolCall.name);
         if (tool) {
-          const result = await tool.invoke(toolCall.args);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const result = await (tool as any).invoke(toolCall.args);
           if (toolCall.name === "create_audience") {
             audienceSegments.push(JSON.parse(result));
           }

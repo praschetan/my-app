@@ -7,7 +7,7 @@ import {
 import type { AgentStateType } from "../state";
 import { db } from "@/server/db";
 import { events, campaignExecutions } from "@/server/db/schema";
-import { eq, and, count, sql } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 
 const PERFORMANCE_MONITOR_PROMPT = `You are an expert Performance Monitor agent in a marketing automation platform.
 

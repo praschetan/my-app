@@ -8,7 +8,7 @@ export interface SMSConfig {
 export interface SMSMessage {
   to: string;
   body: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class SMSService {

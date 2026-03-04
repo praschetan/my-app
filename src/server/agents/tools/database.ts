@@ -4,9 +4,7 @@ import { db } from "@/server/db";
 import {
   campaigns,
   audiences,
-  audienceMembers,
   content,
-  contentVariants,
   channels,
   agentActions,
 } from "@/server/db/schema";
@@ -43,7 +41,7 @@ export function createUpdateCampaignTool() {
         .enum(["draft", "planning", "ready", "scheduled", "running", "paused", "completed", "failed"])
         .optional()
         .describe("New campaign status"),
-      aiPlan: z.record(z.any()).optional().describe("AI-generated campaign plan"),
+      aiPlan: z.record(z.unknown()).optional().describe("AI-generated campaign plan"),
     }),
     func: async ({ campaignId, status, aiPlan }) => {
       const [updated] = await db
@@ -68,8 +66,8 @@ export function createCreateAudienceTool() {
       campaignId: z.string().describe("The campaign ID"),
       name: z.string().describe("Audience segment name"),
       description: z.string().optional().describe("Audience description"),
-      criteria: z.record(z.any()).describe("Segmentation criteria"),
-      aiInsights: z.record(z.any()).optional().describe("AI-generated insights"),
+      criteria: z.record(z.unknown()).describe("Segmentation criteria"),
+      aiInsights: z.record(z.unknown()).optional().describe("AI-generated insights"),
     }),
     func: async ({ campaignId, name, description, criteria, aiInsights }) => {
       const [audience] = await db
@@ -127,8 +125,8 @@ export function createLogActionTool(runId: string) {
         .enum(["campaign_planner", "audience_analyzer", "content_creator", "channel_optimizer", "performance_monitor"])
         .describe("Agent taking the action"),
       action: z.string().describe("Action being taken"),
-      input: z.record(z.any()).optional().describe("Action input"),
-      output: z.record(z.any()).optional().describe("Action output"),
+      input: z.record(z.unknown()).optional().describe("Action input"),
+      output: z.record(z.unknown()).optional().describe("Action output"),
       reasoning: z.string().optional().describe("Agent's reasoning"),
     }),
     func: async ({ agent, action, input, output, reasoning }) => {
