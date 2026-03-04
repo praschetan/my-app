@@ -20,7 +20,8 @@
       "WebFetch(domain:my-app-production-7ca0.up.railway.app)",
       "WebFetch(domain:my-app-service-production.up.railway.app)",
       "Bash(grep:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(tr ';' '\\\\n')"
     ]
   }
 }
