@@ -4,10 +4,9 @@ set -e
 
 echo "🔄 Running database migrations..."
 
-# Push database schema using drizzle-kit
-npx drizzle-kit push --verbose
+# Run pre-generated migrations using plain JavaScript
+node scripts/migrate.js
 
-echo "✅ Migrations completed!"
 echo ""
 echo "🚀 Starting application..."
 

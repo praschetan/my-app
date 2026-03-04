@@ -12,7 +12,10 @@ RUN npm ci
 # Copy source files
 COPY . .
 
-# Generate Prisma client and build
+# Generate database migrations
+RUN npm run db:generate
+
+# Build Next.js application
 RUN npm run build
 
 # Production stage
@@ -28,7 +31,8 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
-COPY --from=builder /app/src/server/db ./src/server/db
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/src ./src
 COPY --from=builder /app/scripts ./scripts
 
 # Make startup script executable
