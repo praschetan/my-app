@@ -9,7 +9,18 @@ interface AgentStatusProps {
 }
 
 export function AgentStatus({ runId }: AgentStatusProps) {
-  const { data: run, isLoading } = api.agents.getRunById.useQuery({ id: runId });
+  const isActive = (status: string) => status === "pending" || status === "running";
+
+  const { data: run, isLoading } = api.agents.getRunById.useQuery(
+    { id: runId },
+    {
+      refetchInterval: (query) => {
+        const status = query.state.data?.status;
+        if (status && !isActive(status)) return false;
+        return 2000;
+      },
+    }
+  );
 
   if (isLoading) {
     return <div>Loading agent status...</div>;
@@ -27,11 +38,29 @@ export function AgentStatus({ runId }: AgentStatusProps) {
             <CardTitle>Agent Workflow</CardTitle>
             <CardDescription>Thread: {run.threadId}</CardDescription>
           </div>
-          <Badge variant={getStatusVariant(run.status)}>{run.status}</Badge>
+          <div className="flex items-center gap-2">
+            {isActive(run.status) && (
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
+              </span>
+            )}
+            <Badge variant={getStatusVariant(run.status)}>{run.status}</Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
+          {isActive(run.status) && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {run.currentAgent ? (
+                <span>{run.currentAgent} running...</span>
+              ) : (
+                <span>Running...</span>
+              )}
+            </div>
+          )}
+
           {run.currentAgent && (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Current Agent:</span>
@@ -64,8 +93,8 @@ export function AgentStatus({ runId }: AgentStatusProps) {
           )}
 
           {run.error && (
-            <div className="bg-destructive/10 text-destructive p-3 rounded-md text-sm">
-              <span className="font-medium">Error:</span> {run.error}
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive p-3 rounded-md text-sm">
+              <span className="font-bold">Error:</span> {run.error}
             </div>
           )}
 

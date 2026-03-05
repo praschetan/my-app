@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { useState } from "react";
 import { api } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,20 +11,22 @@ import Link from "next/link";
 export default function CampaignDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = use(params);
+  const { id } = params;
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
-  const { data: campaign, isLoading, refetch } = api.campaigns.getById.useQuery({ id });
-  const { data: agentRuns } = api.agents.listRuns.useQuery({
-    campaignId: id,
-    limit: 10,
-  });
+  const { data: campaign, isLoading } = api.campaigns.getById.useQuery(
+    { id },
+    { refetchInterval: activeRunId ? 3000 : false }
+  );
+  const { data: agentRuns } = api.agents.listRuns.useQuery(
+    { campaignId: id, limit: 10 },
+    { refetchInterval: activeRunId ? 2000 : false }
+  );
 
   const triggerWorkflow = api.agents.triggerWorkflow.useMutation({
     onSuccess: (run) => {
       setActiveRunId(run.id);
-      refetch();
     },
   });
 
@@ -80,6 +82,13 @@ export default function CampaignDetailPage({
             </Link>
           </div>
         </div>
+
+        {triggerWorkflow.error && (
+          <div className="mb-6 bg-destructive/10 border border-destructive/20 text-destructive p-3 rounded-md text-sm">
+            <span className="font-bold">Failed to start workflow:</span>{" "}
+            {triggerWorkflow.error.message}
+          </div>
+        )}
 
         {(activeRunId || (agentRuns && agentRuns.length > 0)) && (
           <div className="mb-6">
