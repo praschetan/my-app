@@ -14,9 +14,8 @@ export function AgentStatus({ runId }: AgentStatusProps) {
   const { data: run, isLoading } = api.agents.getRunById.useQuery(
     { id: runId },
     {
-      refetchInterval: (query) => {
-        const status = query.state.data?.status;
-        if (status && !isActive(status)) return false;
+      refetchInterval: (data) => {
+        if (data?.status && !isActive(data.status)) return false;
         return 2000;
       },
     }
